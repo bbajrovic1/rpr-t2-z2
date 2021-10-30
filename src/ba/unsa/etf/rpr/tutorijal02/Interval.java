@@ -34,20 +34,40 @@ public class Interval {
         else return false;
     }
 
+    public boolean pripadaDonja() {
+        if(pocetna_pripada) {
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean pripadaGornja() {
+        if(krajnja_pripada) {
+            return true;
+        }
+        else return false;
+    }
+
     public Interval intersect(Interval i) {
         Interval povratni = new Interval();
         if(this.pocetna_tacka >= i.pocetna_tacka) {
             povratni.pocetna_tacka = this.pocetna_tacka;
+            povratni.pocetna_pripada = this.pocetna_pripada;
         }
-        else povratni.pocetna_tacka = i.pocetna_tacka;
+        else {
+            povratni.pocetna_tacka = i.pocetna_tacka;
+            povratni.pocetna_pripada = i.pocetna_pripada;
+        }
 
         if(this.krajnja_tacka <= i.krajnja_tacka) {
             povratni.krajnja_tacka = this.krajnja_tacka;
+            povratni.krajnja_pripada = this.krajnja_pripada;
         }
-        else povratni.krajnja_tacka = i.krajnja_tacka;
+        else {
+            povratni.krajnja_tacka = i.krajnja_tacka;
+            povratni.krajnja_pripada = i.krajnja_pripada;
+        }
 
-        povratni.pocetna_pripada = true;
-        povratni.krajnja_pripada = true;
         return povratni;
     }
 
@@ -55,18 +75,25 @@ public class Interval {
         Interval povratni = new Interval();
         if(i1.pocetna_tacka >= i2.pocetna_tacka) {
             povratni.pocetna_tacka = i1.pocetna_tacka;
+            povratni.pocetna_pripada = i1.pocetna_pripada;
         }
-        else povratni.pocetna_tacka = i2.pocetna_tacka;
+        else {
+            povratni.pocetna_tacka = i2.pocetna_tacka;
+            povratni.pocetna_pripada = i2.pocetna_pripada;
+        }
 
         if(i1.krajnja_tacka <= i2.krajnja_tacka) {
             povratni.krajnja_tacka = i1.krajnja_tacka;
+            povratni.krajnja_pripada = i1.krajnja_pripada;
         }
-        else povratni.krajnja_tacka = i2.krajnja_tacka;
+        else {
+            povratni.krajnja_tacka = i2.krajnja_tacka;
+            povratni.krajnja_pripada = i2.krajnja_pripada;
+        }
 
-        povratni.pocetna_pripada = true;
-        povratni.krajnja_pripada = true;
         return povratni;
     }
+
 
 
     @Override
@@ -74,9 +101,19 @@ public class Interval {
         if(this.isNull()) {
             return "()";
         }
-        else {
+        else if(this.pripadaDonja() && this.pripadaGornja()){
+            return "[" + this.pocetna_tacka + "," + this.krajnja_tacka + "]";
+        }
+        else if(!this.pripadaDonja() && this.pripadaGornja()){
+            return "(" + this.pocetna_tacka + "," + this.krajnja_tacka + "]";
+        }
+        else if(this.pripadaDonja() && !this.pripadaGornja()){
             return "[" + this.pocetna_tacka + "," + this.krajnja_tacka + ")";
         }
+        else if(!this.pripadaDonja() && !this.pripadaGornja()){
+            return "(" + this.pocetna_tacka + "," + this.krajnja_tacka + ")";
+        }
+        else return "";
     }
 
     @Override
